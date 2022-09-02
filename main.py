@@ -77,14 +77,15 @@ async def on_ready():
 @client.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
     voice_state = member.voice
-    if voice_state.channel != afk_voice_channel and voice_state is not None:
-        if voice_state.self_deaf:
-            task = create_task(countdown(30, member))
-            member_early_interrupt = await task
-            if not member_early_interrupt:
-                await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
-                await member.move_to(afk_voice_channel)
-        if before.self_deaf and not after.self_deaf:
-            channel_members[member.name]["timeout_interrupt"] = True
+    if voice_state is not None:
+        if voice_state.channel != afk_voice_channel:
+            if voice_state.self_deaf and not voice_state.self_stream:
+                task = create_task(countdown(30, member))
+                member_early_interrupt = await task
+                if not member_early_interrupt:
+                    await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
+                    await member.move_to(afk_voice_channel)
+            if before.self_deaf and not after.self_deaf:
+                channel_members[member.name]["timeout_interrupt"] = True
 
 client.run(token=discord_token)
