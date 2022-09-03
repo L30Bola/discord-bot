@@ -24,6 +24,7 @@ log_text_channel_name = getenv("LOG_TEXT_CHANNEL_NAME")
 log_text_channel = None
 afk_voice_channel_name = getenv("AFK_VOICE_CHANNEL_NAME")
 afk_voice_channel = None
+timeout_timer = int(getenv("TIMEOUT_TIMER"))
 
 channel_members = {}
 
@@ -72,7 +73,7 @@ async def on_ready():
             "entity": member,
             "timeout_interrupt": None,
         }
-    print("member dictionary populated")
+    print("member dictionary populated: ", channel_members)
 
 @client.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
@@ -80,7 +81,7 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
     if voice_state is not None:
         if voice_state.channel != afk_voice_channel:
             if voice_state.self_deaf and not voice_state.self_stream:
-                task = create_task(countdown(30, member))
+                task = create_task(countdown(timeout_timer, member))
                 member_early_interrupt = await task
                 if not member_early_interrupt:
                     await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
