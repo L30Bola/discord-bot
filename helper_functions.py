@@ -4,11 +4,12 @@ from discord import (
     Member,
 )
 from globals import *
+from logger import *
 
 async def countdown(time: float | int, member: Member):
     step = 0.1
     early_interrupt = False
-    print(f"countdown start for {member.name}")
+    logger.info(f"countdown start for {member.name}")
     while time > 0:
         await sleep(step)
         time -= step
@@ -16,7 +17,7 @@ async def countdown(time: float | int, member: Member):
             channel_members[member.name]["timeout_interrupt"] = False
             early_interrupt = True
             break
-    print(f"countdown end for {member.name}. time left: {time:.1f}")
+    logger.info(f"countdown end for {member.name}. time left: {time:.1f}")
     return early_interrupt
 
 async def get_text_channel_by_name(channel_name: str):
