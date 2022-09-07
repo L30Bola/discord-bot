@@ -17,7 +17,7 @@ async def on_ready():
     await populate_channel_entity()
     await populate_members_structs()
     logger.info(f"there are {len(channel_members)} members on '{channel.name}'")
-    logger.info("member dictionary populated: " + sorted(channel_members_names.items()))
+    logger.info("member dictionary populated: " + str(sorted(channel_members_names.items())))
 
 @client.event
 async def on_voice_state_update(member: Member, before: VoiceState, after: VoiceState):
