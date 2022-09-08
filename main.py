@@ -24,12 +24,14 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
     voice_state = member.voice
     if voice_state is not None:
         if voice_state.channel != afk_voice_channel:
-            if voice_state.self_deaf and not voice_state.self_stream:
+        # TODO: enable users to avoid being moved to the AFK channel if they are streaming (voice_state.self_stream). 
+        # Maybe also make the same logic if they are with their webcam on (voice_state.self_video)
+            if voice_state.self_deaf:
                 member_early_interrupt = await countdown(timeout_timer, member)
                 if not member_early_interrupt:
                     await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
                     await member.move_to(afk_voice_channel)
-            if (before.self_deaf and not after.self_deaf) or (voice_state.self_stream or after.self_stream):
+            if before.self_deaf and not after.self_deaf:
                 channel_members[member.name]["timeout_interrupt"] = True
             
 
