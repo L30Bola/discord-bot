@@ -45,7 +45,8 @@ async def on_member_remove(member: Member):
 
 @client.event
 async def on_message(message: Message):
-    if message.channel.id == message.author.dm_channel.id: # DM messages
-        await message.channel.send("Por que está falando comigo, quer alguma coisa?")
+    if message.author != client.user: # not answering bot's own messages
+        if not message.guild: # DM messages
+            await message.channel.send("Por que está falando comigo, quer alguma coisa?")
 
 client.run(token=discord_token, log_handler=None)
