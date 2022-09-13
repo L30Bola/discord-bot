@@ -210,3 +210,6 @@ tags
 *.code-workspace
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudiocode,vim,python
+
+# Discord logs
+discord.log*
