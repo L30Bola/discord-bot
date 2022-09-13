@@ -14,6 +14,7 @@ async def on_ready():
     logger.info(f"log text channel: {log_text_channel.name}")
     logger.info(f"afk voice channel: {afk_voice_channel.name}")
     channel = bot.get_guild(channel_being_managed_id)
+    await populate_channel_entity()
     await populate_members_structs()
     logger.info(f"there are {len(channel_members)} members on '{channel.name}'")
     logger.info("member dictionary populated: " + str(sorted(channel_members_names.items())))
