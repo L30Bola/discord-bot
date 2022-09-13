@@ -1,8 +1,9 @@
 from os import getenv
 from discord import (
-    Client,
     Intents,
+    Game
 )
+from discord.ext.commands import Bot
 
 discord_token = getenv("DISCORD_TOKEN")
 
@@ -22,4 +23,9 @@ intents.message_content = True
 intents.voice_states = True
 intents.members = True
 
-client = Client(intents=intents)
+activity = Game(name="Mantendo a ordem! Farmadores não passarão!!")
+bot = Bot(
+    intents=intents,
+    activity=activity,
+    command_prefix="#"
+)

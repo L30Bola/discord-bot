@@ -9,6 +9,7 @@ from logger import *
 async def countdown(time: float | int, member: Member):
     step = 0.1
     early_interrupt = False
+    channel_members[member.name]["timeout_interrupt"] = False
     logger.info(f"countdown start for {member.name}")
     while time > 0:
         await sleep(step)
@@ -21,7 +22,7 @@ async def countdown(time: float | int, member: Member):
     return early_interrupt
 
 async def get_text_channel_by_name(channel_name: str):
-    current_guild = client.get_guild(channel_being_managed_id)
+    current_guild = bot.get_guild(channel_being_managed_id)
     channels = current_guild.channels
     for channel in channels:
         if channel.type == ChannelType.text:
@@ -30,7 +31,7 @@ async def get_text_channel_by_name(channel_name: str):
     return None
 
 async def get_voice_channel_by_name(channel_name: str):
-    current_guild = client.get_guild(channel_being_managed_id)
+    current_guild = bot.get_guild(channel_being_managed_id)
     channels = current_guild.channels
     for channel in channels:
         if channel.type == ChannelType.voice:
@@ -40,7 +41,7 @@ async def get_voice_channel_by_name(channel_name: str):
 
 async def populate_channel_entity():
     global channel
-    channel = client.get_guild(channel_being_managed_id)
+    channel = bot.get_guild(channel_being_managed_id)
 
 async def populate_members_structs():
     global channel_members, channel_members_names
