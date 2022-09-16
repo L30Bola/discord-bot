@@ -13,6 +13,7 @@ async def on_ready():
     afk_voice_channel = await get_voice_channel_by_name(afk_voice_channel_name)
     logger.info(f"log text channel: {log_text_channel.name}")
     logger.info(f"afk voice channel: {afk_voice_channel.name}")
+    logger.info(f"afk timeout: {timeout_timer} seconds")
     channel = bot.get_guild(channel_being_managed_id)
     await populate_channel_entity()
     await populate_members_structs()
@@ -29,6 +30,7 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
             if voice_state.self_deaf:
                 member_early_interrupt = await countdown(timeout_timer, member)
                 if not member_early_interrupt:
+                    channel_members[member.name]["is_timing_out"] = False
                     await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
                     await member.move_to(afk_voice_channel)
             if before.self_deaf and not after.self_deaf:
