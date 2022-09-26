@@ -3,20 +3,25 @@ from discord import (
     VoiceState, 
     Message
 )
-from helper_functions import *
+from slash_functions import *
 
 @bot.event
 async def on_ready():
     logger.info(f"logged on as {bot.user}!")
-    global log_text_channel, afk_voice_channel, channel_members, channel
-    log_text_channel = await get_text_channel_by_name(log_text_channel_name)
-    afk_voice_channel = await get_voice_channel_by_name(afk_voice_channel_name)
+    global log_text_channel, afk_voice_channel, channel_members, admin_text_channel, channel, guild_synced
+    channel = bot.get_guild(channel_being_managed_id)
+    if not guild_synced:
+        await bot.tree.sync(guild=managed_guild_object)
+        log_text_channel = await get_text_channel_by_name(log_text_channel_name)
+        afk_voice_channel = await get_voice_channel_by_name(afk_voice_channel_name)
+        admin_text_channel = await get_text_channel_by_name(admin_text_channel_name)
+        await populate_channel_entity()
+        await populate_members_structs()
+        guild_synced = True
     logger.info(f"log text channel: {log_text_channel.name}")
     logger.info(f"afk voice channel: {afk_voice_channel.name}")
+    logger.info(f"admin text channel: {admin_text_channel.name}")
     logger.info(f"afk timeout: {timeout_timer} seconds")
-    channel = bot.get_guild(channel_being_managed_id)
-    await populate_channel_entity()
-    await populate_members_structs()
     logger.info(f"there are {len(channel_members)} members on '{channel.name}'")
     logger.info("member dictionary populated: " + str(sorted(channel_members_names.items())))
 
