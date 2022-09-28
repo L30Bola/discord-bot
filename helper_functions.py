@@ -11,20 +11,20 @@ from logger import *
 async def countdown(member: Member):
     channel_member = channel_members[member.name]
     early_interrupt = False
+    end_string = f"countdown end for {channel_member.discord_entity.name}."
     if not channel_member.is_timing_out:
         step = 0.1
         channel_member.is_timing_out = True
-        logger.info(f"countdown start for {member.name}")
+        logger.info(f"countdown start for {channel_member.discord_entity.name}")
         while channel_member.timeout_timer > 0:
             await sleep(step)
             channel_member.timeout_timer -= step
             if channel_member.timeout_interrupt:
                 early_interrupt = True
+                end_string += f" early interrupted, time left: {channel_member.timeout_timer:.1f}"
                 break
-        logger.info(f"countdown end for {member.name}. time left: {channel_member.timeout_timer:.1f}")
-    channel_member.timeout_interrupt = False
-    channel_member.is_timing_out = False
-    channel_member.timeout_timer = timeout_timer
+        logger.info(f"{end_string}")
+    reload_user_entry(channel_member, channel_members)
     return early_interrupt
 
 async def get_text_channel_by_name(channel_name: str):
@@ -66,3 +66,7 @@ def build_members_table(channel_members: dict[str, ChannelMember]):
     )
     return output
 
+def reload_user_entry(channel_member: ChannelMember, channel_members: dict[str, ChannelMember]):
+    channel_members[channel_member.discord_entity.name].is_timing_out = False
+    channel_members[channel_member.discord_entity.name].timeout_interrupt = False
+    channel_members[channel_member.discord_entity.name].timeout_timer = timeout_timer

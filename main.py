@@ -40,6 +40,8 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                     await member.move_to(afk_voice_channel)
             if before.self_deaf and not after.self_deaf:
                 channel_members[member.name].timeout_interrupt = True
+        else:
+            channel_members[member.name].timeout_interrupt = True
 
 @bot.event
 async def on_member_join(member: Member):
