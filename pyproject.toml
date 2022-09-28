@@ -10,3 +10,4 @@ authors = [
 [tool.poetry.dependencies]
 python = ">=3.8.0,<4"
 "discord.py" = "==2.0.1"
+table2ascii = "^0.3.0"

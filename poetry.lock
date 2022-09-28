@@ -104,6 +104,18 @@ optional = false
 python-versions = ">=3.7"
 
 [[package]]
+name = "table2ascii"
+version = "0.3.0"
+description = "Convert 2D Python lists into Unicode/Ascii tables"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+dev = ["pre-commit (==2.18.1)", "pyright (==1.1.244)", "pytest (==7.1.2)", "slotscheck (==0.14.0)", "taskipy (==1.10.1)", "tox (==3.24.5)"]
+docs = ["enum-tools", "sphinx", "sphinx-autobuild", "sphinx-rtd-theme", "sphinx-toolbox", "sphinxcontrib-trio", "sphinxext-opengraph"]
+
+[[package]]
 name = "yarl"
 version = "1.8.1"
 description = "Yet another URL library"
@@ -118,7 +130,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.8.0,<4"
-content-hash = "e4e556991939bbf8d62b5571cd229fec4b2478b65b53a3c85e578c6768192932"
+content-hash = "81659a9d7d1cc4c2744e78373351227d280c3f5f65a64148b4f1407d2223f3c6"
 
 [metadata.files]
 aiohttp = [
@@ -340,6 +352,10 @@ multidict = [
     {file = "multidict-6.0.2-cp39-cp39-win32.whl", hash = "sha256:23b616fdc3c74c9fe01d76ce0d1ce872d2d396d8fa8e4899398ad64fb5aa214a"},
     {file = "multidict-6.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:4bae31803d708f6f15fd98be6a6ac0b6958fcf68fda3c77a048a4f9073704aae"},
     {file = "multidict-6.0.2.tar.gz", hash = "sha256:5ff3bd75f38e4c43f1f470f2df7a4d430b821c4ce22be384e1459cb57d6bb013"},
+]
+table2ascii = [
+    {file = "table2ascii-0.3.0-py3-none-any.whl", hash = "sha256:18e4cdfcd3cda8eeb8fd6a6cb216b20492c307af55d87f33f58755c2f36e9ae9"},
+    {file = "table2ascii-0.3.0.tar.gz", hash = "sha256:390afedabcee8ebc1502107650cff7d00cb45d1d31fead1c7e2a52c968be41a5"},
 ]
 yarl = [
     {file = "yarl-1.8.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:abc06b97407868ef38f3d172762f4069323de52f2b70d133d096a48d72215d28"},

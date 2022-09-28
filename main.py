@@ -7,8 +7,9 @@ from slash_functions import *
 
 @bot.event
 async def on_ready():
+    global log_text_channel, afk_voice_channel, channel_members, admin_text_channel, channel, guild_synced, on_ready_called
+    on_ready_called += 1
     logger.info(f"logged on as {bot.user}!")
-    global log_text_channel, afk_voice_channel, channel_members, admin_text_channel, channel, guild_synced
     channel = bot.get_guild(channel_being_managed_id)
     if not guild_synced:
         await bot.tree.sync(guild=managed_guild_object)
@@ -33,13 +34,12 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
         # TODO: enable users to avoid being moved to the AFK channel if they are streaming (voice_state.self_stream). 
         # Maybe also make the same logic if they are with their webcam on (voice_state.self_video)
             if voice_state.self_deaf:
-                member_early_interrupt = await countdown(timeout_timer, member)
+                member_early_interrupt = await countdown(member)
                 if not member_early_interrupt:
-                    channel_members[member.name]["is_timing_out"] = False
                     await log_text_channel.send(f"{member.mention} movido para o {afk_voice_channel.name}.")
                     await member.move_to(afk_voice_channel)
             if before.self_deaf and not after.self_deaf:
-                channel_members[member.name]["timeout_interrupt"] = True
+                channel_members[member.name].timeout_interrupt = True
 
 @bot.event
 async def on_member_join(member: Member):

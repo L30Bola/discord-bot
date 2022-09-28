@@ -1,10 +1,10 @@
-from os import getenv
 from discord import (
     Intents,
     Game,
     Object
 )
 from discord.ext.commands import Bot
+from channelmember import *
 
 discord_token = getenv("DISCORD_TOKEN")
 
@@ -17,11 +17,10 @@ admin_text_channel = None
 
 afk_voice_channel_name = getenv("AFK_VOICE_CHANNEL_NAME")
 afk_voice_channel = None
-timeout_timer = int(getenv("TIMEOUT_TIMER"))
 
 channel = None
-channel_members = {}
-channel_members_names = {}
+channel_members: dict[str, ChannelMember] = {}
+channel_members_names: dict[str, str] = {}
 
 intents = Intents.default()
 intents.message_content = True
@@ -37,3 +36,4 @@ bot = Bot(
 
 managed_guild_object = Object(id=channel_being_managed_id)
 guild_synced = False
+on_ready_called = 0
