@@ -12,18 +12,21 @@ async def countdown(member: Member):
     channel_member = channel_members[member.name]
     early_interrupt = False
     end_string = f"countdown end for {channel_member.discord_entity.name}."
-    if not channel_member.is_timing_out:
+    if not channel_member.timeout.is_timing_out:
         step = 0.1
-        channel_member.is_timing_out = True
+        channel_member.timeout.is_timing_out = True
         logger.info(f"countdown start for {channel_member.discord_entity.name}")
-        while channel_member.timeout_timer > 0:
+        while channel_member.timeout.timer > 0 and channel_member.timeout.is_timing_out:
             await sleep(step)
-            channel_member.timeout_timer -= step
-            if channel_member.timeout_interrupt:
+            channel_member.timeout.timer -= step
+            if channel_member.timeout.interrupt_by_undeafen:
                 early_interrupt = True
-                end_string += (
-                    f" early interrupted, time left: {channel_member.timeout_timer:.1f}"
-                )
+                end_string += " early interrupted by undeafen"
+            elif channel_member.timeout.interrupt_by_afk_channel_move:
+                early_interrupt = True
+                end_string += " early interrupted by moving to AFK channel"
+            if early_interrupt:
+                end_string += f"- time left: {channel_member.timeout.timer:.1f}"
                 break
         logger.info(f"{end_string}")
     reload_user_entry(channel_member.discord_entity.name)
@@ -73,15 +76,23 @@ def build_members_table():
     body = [
         (
             temp[member].discord_entity.name,
-            temp[member].is_timing_out,
-            temp[member].timeout_interrupt,
-            f"{temp[member].timeout_timer:.1f}",
+            temp[member].timeout.is_timing_out,
+            (
+                temp[member].timeout.interrupt_by_undeafen,
+                temp[member].timeout.interrupt_by_afk_channel_move,
+            ),
+            f"{temp[member].timeout.timer:.1f}",
         )
         for member in temp
         if not temp[member].discord_entity.bot
     ]
     output = t2a(
-        header=["Member", "Is timing out?", "Timeout interrupt", "Countdown timer"],
+        header=[
+            "Member",
+            "Is timing out?",
+            "Timeout interrupt (by undeafen | by AFK channel move)",
+            "Countdown timer",
+        ],
         body=body,
         style=PresetStyle.thin_compact,
     )
@@ -90,6 +101,7 @@ def build_members_table():
 
 def reload_user_entry(channel_member_name: str):
     global channel_members
-    channel_members[channel_member_name].is_timing_out = False
-    channel_members[channel_member_name].timeout_interrupt = False
-    channel_members[channel_member_name].timeout_timer = timeout_timer
+    channel_members[channel_member_name].timeout.is_timing_out = False
+    channel_members[channel_member_name].timeout.interrupt_by_afk_channel_move = False
+    channel_members[channel_member_name].timeout.interrupt_by_undeafen = False
+    channel_members[channel_member_name].timeout.timer = timeout_timer
