@@ -3,6 +3,7 @@ from os import getenv
 
 timeout_timer = float(getenv("TIMEOUT_TIMER"))
 
+
 class ChannelMember:
     def __init__(self, member: Member):
         self._discord_entity = member

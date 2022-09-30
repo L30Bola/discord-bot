@@ -1,8 +1,4 @@
-from discord import (
-    Intents,
-    Game,
-    Object
-)
+from discord import Intents, Game, Object
 from discord.ext.commands import Bot
 from channelmember import *
 
@@ -36,4 +32,4 @@ bot = Bot(
 
 managed_guild_object = Object(id=channel_being_managed_id)
 guild_synced = False
-on_ready_called = 0
+populate_members_called = 0
