@@ -9,6 +9,7 @@ from logger import *
 
 
 async def countdown(member: Member):
+    global channel_members
     channel_member = channel_members[member.name]
     early_interrupt = False
     end_string = f"countdown end for {channel_member.discord_entity.name}."
@@ -25,8 +26,11 @@ async def countdown(member: Member):
             elif channel_member.timeout.interrupt_by_afk_channel_move:
                 early_interrupt = True
                 end_string += " early interrupted by moving to AFK channel"
+            elif channel_member.timeout.interrupt_by_self_disconnect:
+                early_interrupt = True
+                end_string += " early interrupted by self disconnecting"
             if early_interrupt:
-                end_string += f"- time left: {channel_member.timeout.timer:.1f}"
+                end_string += f" - time left: {channel_member.timeout.timer:.1f}"
                 break
         logger.info(f"{end_string}")
     reload_user_entry(channel_member.discord_entity.name)
@@ -80,6 +84,7 @@ def build_members_table():
             (
                 temp[member].timeout.interrupt_by_undeafen,
                 temp[member].timeout.interrupt_by_afk_channel_move,
+                temp[member].timeout._interrupt_by_self_disconnect,
             ),
             f"{temp[member].timeout.timer:.1f}",
         )
@@ -90,7 +95,7 @@ def build_members_table():
         header=[
             "Member",
             "Is timing out?",
-            "Timeout interrupt (by undeafen | by AFK channel move)",
+            "undeafen | AFK | disconnect",
             "Countdown timer",
         ],
         body=body,
@@ -104,4 +109,5 @@ def reload_user_entry(channel_member_name: str):
     channel_members[channel_member_name].timeout.is_timing_out = False
     channel_members[channel_member_name].timeout.interrupt_by_afk_channel_move = False
     channel_members[channel_member_name].timeout.interrupt_by_undeafen = False
+    channel_members[channel_member_name].timeout.interrupt_by_self_disconnect = False
     channel_members[channel_member_name].timeout.timer = timeout_timer

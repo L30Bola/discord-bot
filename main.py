@@ -34,7 +34,10 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
         if voice_state.channel != afk_voice_channel:
             # TODO: enable users to avoid being moved to the AFK channel if they are streaming (voice_state.self_stream)
             # Maybe also make the same logic if they are with their webcam on (voice_state.self_video)
-            if voice_state.self_deaf:
+            if (voice_state.self_deaf and not before.self_deaf) or (
+                voice_state.self_deaf
+                and (before.channel == afk_voice_channel or before.channel == None)
+            ):
                 member_early_interrupt = await countdown(member)
                 if not member_early_interrupt:
                     await log_text_channel.send(
@@ -48,6 +51,9 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                 channel_members[
                     member.name
                 ].timeout.interrupt_by_afk_channel_move = True
+    else:
+        if channel_members[member.name].timeout.is_timing_out:
+            channel_members[member.name].timeout.interrupt_by_self_disconnect = True
 
 
 @bot.event

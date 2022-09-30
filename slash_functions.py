@@ -54,8 +54,12 @@ async def print_populate_members(interaction: Interaction):
     description="Reload the user entry on the channel_members struct",
     guild=managed_guild_object,
 )
-async def refresh_user(interaction: Interaction, member: str):
-    temp = bot.get_user(member.strip("<").strip(">").strip("@"))
+async def refresh_user(interaction: Interaction, name: str):
+    channel = bot.get_guild(channel_being_managed_id)
+    for m in channel.members:
+        if m.id == int(name.strip("<").strip(">").strip("@")):
+            member = m
+    reload_user_entry(member.name)
     await interaction.response.send_message(
-        f"{temp.name} entry on members struct refreshed", ephemeral=True
+        f"{member.name} entry on members struct refreshed!", ephemeral=True
     )

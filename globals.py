@@ -1,4 +1,4 @@
-from discord import Intents, Game, Object
+from discord import Intents, Game, Object, Guild
 from discord.ext.commands import Bot
 from channelmember import *
 
@@ -14,7 +14,7 @@ admin_text_channel = None
 afk_voice_channel_name = getenv("AFK_VOICE_CHANNEL_NAME")
 afk_voice_channel = None
 
-channel = None
+channel: Guild = None
 channel_members: dict[str, ChannelMember] = {}
 channel_members_names: dict[str, str] = {}
 

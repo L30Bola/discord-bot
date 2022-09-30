@@ -9,6 +9,7 @@ class Timeout:
         self._timer: float = timeout_timer
         self._interrupt_by_undeafen: bool = False
         self._interrupt_by_afk_channel_move: bool = False
+        self._interrupt_by_self_disconnect: bool = False
 
     @property
     def is_timing_out(self):
@@ -41,3 +42,11 @@ class Timeout:
     @interrupt_by_afk_channel_move.setter
     def interrupt_by_afk_channel_move(self, value: bool):
         self._interrupt_by_afk_channel_move = value
+
+    @property
+    def interrupt_by_self_disconnect(self):
+        return self._interrupt_by_self_disconnect
+
+    @interrupt_by_self_disconnect.setter
+    def interrupt_by_self_disconnect(self, value: bool):
+        self._interrupt_by_self_disconnect = value
