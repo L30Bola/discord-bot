@@ -1,11 +1,27 @@
+from http.client import HTTPSConnection
+from backoff import expo, on_exception
 from table2ascii import table2ascii as t2a, PresetStyle
 from asyncio import sleep
 from discord import (
     ChannelType,
     Member,
 )
+from socket import gaierror
+from aiohttp.client_exceptions import ClientConnectorError
 from globals import *
 from logger import *
+
+
+@on_exception(
+    wait_gen=expo,
+    exception=(gaierror, ClientConnectorError),
+    max_time=600,
+    logger=logger,
+)
+def check_connection():
+    connection = HTTPSConnection("discord.com", timeout=5)
+    connection.request("HEAD", "/")
+    connection.close()
 
 
 async def countdown(member: Member):

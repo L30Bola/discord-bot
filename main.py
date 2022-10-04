@@ -51,7 +51,7 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                 channel_members[
                     member.name
                 ].timeout.interrupt_by_afk_channel_move = True
-    else:
+    else:  # if user voice state is None, then they disconnected from VoiceChannel
         if channel_members[member.name].timeout.is_timing_out:
             channel_members[member.name].timeout.interrupt_by_self_disconnect = True
 
@@ -75,4 +75,6 @@ async def on_message(message: Message):
             )
 
 
-bot.run(token=discord_token, log_handler=None)
+if __name__ == "__main__":
+    check_connection()
+    bot.run(token=discord_token, log_handler=None)
