@@ -3,8 +3,27 @@ import logging
 import logging.handlers
 from os import getenv
 from sys import stdout
+from uuid import UUID
 
-logger = logging.getLogger("discord")
+
+class LogFilter(logging.Filter):
+    """
+    In case it's needed to add custom dynamic fields to the Logger.
+
+    Don't forget to add the new custom field to the Formatter and
+    and to the logger with `logger.addFilter(LogFilter(event_id=event_id))`
+    """
+
+    def __init__(self, event_id: UUID, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.event_id = event_id
+
+    def filter(self, record):
+        record.event_id = self.event_id
+        return True
+
+
+logger = logging.getLogger("discord-bot")
 
 if strtobool(getenv("DEBUG", "False")):
     logger.setLevel(logging.DEBUG)

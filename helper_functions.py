@@ -127,3 +127,21 @@ def reload_user_entry(channel_member_name: str):
     channel_members[channel_member_name].timeout.interrupt_by_undeafen = False
     channel_members[channel_member_name].timeout.interrupt_by_self_disconnect = False
     channel_members[channel_member_name].timeout.timer = timeout_timer
+
+
+def get_user_entry(channel_member_name: str):
+    global channel_members
+    entry = {
+        "is_timing_out": channel_members[channel_member_name].timeout.is_timing_out,
+        "interrupt_by_undeafen": channel_members[
+            channel_member_name
+        ].timeout.interrupt_by_undeafen,
+        "interrupt_by_afk_channel_move": channel_members[
+            channel_member_name
+        ].timeout.interrupt_by_undeafen,
+        "interrupt_by_self_disconnect": channel_members[
+            channel_member_name
+        ].timeout.interrupt_by_self_disconnect,
+        "timer": channel_members[channel_member_name].timeout.timer,
+    }
+    return entry

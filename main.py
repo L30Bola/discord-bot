@@ -23,7 +23,7 @@ async def on_ready():
     logger.info(
         "member dictionary populated: " + str(sorted(channel_members_names.items()))
     )
-    logger.info(guild_synced)
+    logger.info(f"synced: {guild_synced}")
 
 
 @bot.event
@@ -44,9 +44,9 @@ async def on_voice_state_update(member: Member, before: VoiceState, after: Voice
                         f"{member.mention} movido para o {afk_voice_channel.name}."
                     )
                     await member.move_to(afk_voice_channel)
-            if before.self_deaf and not after.self_deaf:
+            elif before.self_deaf and not after.self_deaf: # if user undeafened themselves
                 channel_members[member.name].timeout.interrupt_by_undeafen = True
-        else:
+        else: # if user moved to the AFK Channel
             if channel_members[member.name].timeout.is_timing_out:
                 channel_members[
                     member.name
