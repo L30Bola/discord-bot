@@ -8,8 +8,6 @@ channel_being_managed_id = int(getenv("CHANNEL_BEING_MANAGED_ID"))
 
 log_text_channel_name = getenv("LOG_TEXT_CHANNEL_NAME")
 log_text_channel = None
-admin_text_channel_name = getenv("ADMIN_TEXT_CHANNEL_NAME")
-admin_text_channel = None
 
 afk_voice_channel_name = getenv("AFK_VOICE_CHANNEL_NAME")
 afk_voice_channel = None
