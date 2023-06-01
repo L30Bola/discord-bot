@@ -12,6 +12,8 @@ log_text_channel = None
 afk_voice_channel_name = getenv("AFK_VOICE_CHANNEL_NAME")
 afk_voice_channel = None
 
+ignore_bot_users = getenv("IGNORE_BOT_USERS", "False")
+
 channel: Guild = None
 channel_members: dict[str, ChannelMember] = {}
 channel_members_names: dict[str, str] = {}

@@ -81,6 +81,9 @@ async def populate_channel_entity():
 async def populate_members_structs():
     global channel_members, channel_members_names, populate_members_called
     for member in channel.members:
+        if strtobool(ignore_bot_users): # TODO: we should be ignoring bot users when needed (e.g. when trying to start the timeout) and not excluding it from the member list
+            if member.bot:
+                continue
         channel_members[member.name] = ChannelMember(member)
     for member in channel_members:
         if not channel_members[member].discord_entity.bot:
